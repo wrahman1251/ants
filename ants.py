@@ -3,6 +3,13 @@
 # Name:
 # Email:
 
+
+
+# Q1: class AntColony, method simulate
+#     The bees are transported to random rooms in the ant colony
+#
+#     Armor is basically the lifeforce of an insect. If armor goes to 0, the insect is removed from the place.
+
 import random
 import sys
 from ucb import main, interact, trace
