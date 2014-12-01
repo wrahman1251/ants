@@ -188,6 +188,8 @@ class ThrowerAnt(Ant):
     implemented = True
     damage = 1
     food_cost = 4
+    min_range = 0
+    max_range = float('inf')
 
     def nearest_bee(self, hive):
         """Return the nearest Bee in a Place that is not the Hive, connected to
@@ -198,7 +200,30 @@ class ThrowerAnt(Ant):
         Problem B5: This method returns None if there is no Bee in range.
         """
         "*** YOUR CODE HERE ***"
-        return random_or_none(self.place.bees)
+
+        """
+        def check_this_place(place):
+            if place.entrance == None or place.entrance == hive:
+                return None
+            elif place.bees != []:
+                return random_or_none(place.bees)
+            else:
+                return check_this_place(place.entrance)
+
+        if self.place != hive:
+            return check_this_place(self.place)
+        else:
+            return check_this_place(self.place.entrance)
+        """
+
+        idx = 0
+        place = self.place
+        while idx <= self.max_range:
+            if idx <= self.max_range and idx >= self.min_range and place.bees != []:
+                return random_or_none(place.bees)
+            place = place.entrance
+            idx += 1
+        return None
 
     def throw_at(self, target):
         """Throw a leaf at the target Bee, reducing its armor."""
@@ -485,7 +510,10 @@ class LongThrower(ThrowerAnt):
 
     name = 'Long'
     "*** YOUR CODE HERE ***"
-    implemented = False
+    implemented = True
+    min_range = 4
+    max_range = float('inf')
+    food_cost = 3
 
 
 class ShortThrower(ThrowerAnt):
@@ -493,11 +521,22 @@ class ShortThrower(ThrowerAnt):
 
     name = 'Short'
     "*** YOUR CODE HERE ***"
-    implemented = False
+    implemented = True
+    min_range = 0
+    max_range = 2
+    food_cost = 3
 
 
 # Phase 2: Implement a class that represents a WallAnt
 "*** YOUR CODE HERE ***"
+
+class WallAnt(Ant):
+    implemented = True
+    name = 'Wall'
+    food_cost = 4
+
+    def __init__(self, armor=4):
+        Insect.__init__(self, armor)
 
 
 class NinjaAnt(Ant):
