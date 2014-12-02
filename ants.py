@@ -219,13 +219,12 @@ class ThrowerAnt(Ant):
         else:
             return check_this_place(self.place.entrance)
         """
-
         idx = 0
-        place = self.place
-        while idx <= self.max_range:
-            if idx <= self.max_range and idx >= self.min_range and place.bees != []:
-                return random_or_none(place.bees)
-            place = place.entrance
+        current_place = self.place
+        while current_place.entrance != None:
+            if idx >=  self.min_range and current_place.bees != [] and idx <= self.max_range:
+                return random_or_none(current_place.bees)
+            current_place = current_place.entrance
             idx += 1
         return None
 
@@ -549,7 +548,7 @@ class NinjaAnt(Ant):
 
     name = 'Ninja'
     "*** YOUR CODE HERE ***"
-    implemented = False
+    implemented = True
     blocks_path = False
     food_cost = 6
     damage = 1
