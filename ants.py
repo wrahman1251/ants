@@ -562,6 +562,11 @@ class NinjaAnt(Ant):
 
 # Phase 2: Implement a class that represents a ScubaThrower
 "*** YOUR CODE HERE ***"
+class ScubaThrower(ThrowerAnt):
+    implemented = True
+    name = 'Scuba'
+    watersafe = True
+    food_cost = 5
 
 
 class HungryAnt(Ant):
@@ -570,17 +575,27 @@ class HungryAnt(Ant):
     """
     name = 'Hungry'
     "*** YOUR CODE HERE ***"
-    implemented = False
+    implemented = True
+    time_to_digest = 3
+    food_cost = 4
 
     def __init__(self):
         Ant.__init__(self)
         "*** YOUR CODE HERE ***"
+        self.digesting = 0
 
     def eat_bee(self, bee):
         "*** YOUR CODE HERE ***"
+        Insect.reduce_armor(bee, bee.armor)
+        self.digesting = self.time_to_digest
 
     def action(self, colony):
         "*** YOUR CODE HERE ***"
+        if self.digesting != 0:
+            self.digesting -= 1
+        else:
+            if self.place.bees != []:
+                self.eat_bee(random_or_none(self.place.bees))
 
 
 class BodyguardAnt(Ant):
