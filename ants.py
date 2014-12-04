@@ -52,8 +52,20 @@ class Place:
         if insect.is_ant():
             # Phase 2: Special handling for BodyguardAnt
             "*** YOUR CODE HERE ***"
-            assert self.ant is None, 'Two ants in {0}'.format(self)
-            self.ant = insect
+            # assert self.ant is None, 'Two ants in {0}'.format(self)
+            # self.ant = insect
+
+            if self.ant == None:
+                self.ant = insect
+            elif self.ant.can_contain(insect):
+                self.ant.ant = insect
+            elif insect.can_contain(self.ant):
+                insect.ant = self.ant
+                self.ant = insect
+            else:
+                assert self.ant is None, 'Two ants in {0}'.format(self)
+                return
+
         else:
             self.bees.append(insect)
         insect.place = self
@@ -65,7 +77,11 @@ class Place:
         else:
             assert self.ant == insect, '{0} is not in {1}'.format(insect, self)
             "*** YOUR CODE HERE ***"
-            self.ant = None
+            # self.ant = None
+            if self.ant.name == 'Bodyguard':
+                self.ant = self.ant.ant
+            else:
+                self.ant = None
 
         insect.place = None
 
@@ -155,6 +171,7 @@ class Ant(Insect):
     damage = 0
     food_cost = 0
     blocks_path = True
+    container = False
 
     def __init__(self, armor=1):
         """Create an Ant with an armor quantity."""
@@ -162,6 +179,11 @@ class Ant(Insect):
 
     def is_ant(self):
         return True
+
+    def can_contain(self, other):
+        if self.container == True and self.ant == None and other.container == False:
+            return True
+        return False
 
 
 class HarvesterAnt(Ant):
@@ -603,6 +625,9 @@ class BodyguardAnt(Ant):
     name = 'Bodyguard'
     "*** YOUR CODE HERE ***"
     implemented = False
+    container = True
+    food_cost = 4
+    armor = 2
 
     def __init__(self):
         Ant.__init__(self, 2)
@@ -610,9 +635,12 @@ class BodyguardAnt(Ant):
 
     def contain_ant(self, ant):
         "*** YOUR CODE HERE ***"
+        self.ant = ant
 
     def action(self, colony):
         "*** YOUR CODE HERE ***"
+        if self.ant != None:
+            self.ant.action(colony)
 
 
 class QueenPlace:
